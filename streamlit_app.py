@@ -113,7 +113,7 @@ def construct_vector_search_config(livestream, blog_posts, min_episode_number, m
         if min_episode_number:
             ame_conditions.append({
                 "greaterThanOrEquals": {
-                    "key": "episode_number",
+                    "key": "ep_num",
                     "value": float(min_episode_number)
                 }
             })
@@ -121,7 +121,7 @@ def construct_vector_search_config(livestream, blog_posts, min_episode_number, m
         if max_episode_number:
             ame_conditions.append({
                 "lessThanOrEquals": {
-                    "key": "episode_number",
+                    "key": "ep_num",
                     "value": float(max_episode_number)
                 }
             })
