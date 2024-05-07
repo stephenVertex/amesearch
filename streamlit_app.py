@@ -31,10 +31,10 @@ st.title('Cost Optimization Bot')
 search_query = st.text_input("Enter your search query here:")
 
 # Display sample queries and make them clickable to populate the search bar
-sample_query_1 = "What is Banjo's advice for getting started?"
+sample_query_1 = "What is Banjo Obayomi's advice for getting started?"
 sample_query_2 = "What are the steps for EBS snapshot archiving, and why is it important for cost optimization?"
 sample_query_3 = "What does Jeff Barr think about 3d printing?"
-sample_query_4 = "When did stephen and rahul talk about metadata filtering for knowledge bases?"
+sample_query_4 = "When did Stephen and Rahul talk about metadata filtering for knowledge bases?"
 
 # Checkboxes for filtering content
 ame_livestream = st.checkbox('AME livestream', value=True)
@@ -76,7 +76,7 @@ def retrieveAndGenerate(input,
                 }
     }
     # if retrieval_configuration:
-    # rag_config['knowledgeBaseConfiguration']['retrievalConfiguration'] = retrieval_configuration
+    rag_config['knowledgeBaseConfiguration']['retrievalConfiguration'] = retrieval_configuration
     print("--------------------------------------------------------------------------------")
     print(rag_config)
     if sessionId:
