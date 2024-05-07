@@ -76,7 +76,7 @@ def retrieveAndGenerate(input,
                 }
     }
     # if retrieval_configuration:
-    rag_config['knowledgeBaseConfiguration']['retrievalConfiguration'] = retrieval_configuration
+    # rag_config['knowledgeBaseConfiguration']['retrievalConfiguration'] = retrieval_configuration
     print("--------------------------------------------------------------------------------")
     print(rag_config)
     if sessionId:
