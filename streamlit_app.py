@@ -73,10 +73,10 @@ def retrieveAndGenerate(input,
                     'modelArn': model_arn
                 }
     }
-
-    if retrieval_configuration:
-        rag_config['retrievalConfiguration'] = retrieval_configuration
-
+    # if retrieval_configuration:
+    # rag_config['knowledgeBaseConfiguration']['retrievalConfiguration'] = retrieval_configuration
+    print("--------------------------------------------------------------------------------")
+    print(rag_config)
     if sessionId:
         return bedrock_agent_client.retrieve_and_generate(
             input={
@@ -88,15 +88,9 @@ def retrieveAndGenerate(input,
     else:
         return bedrock_agent_client.retrieve_and_generate(
             input={
-                'text': input
+                'text': input  + ".  If there is a list of steps or a list of bullet points, make sure there are two NEWLINE characters before the first point."
             },
-            retrieveAndGenerateConfiguration={
-                'type': 'KNOWLEDGE_BASE',
-                'knowledgeBaseConfiguration': {
-                    'knowledgeBaseId': kbId,
-                    'modelArn': model_arn
-                }
-            }
+            retrieveAndGenerateConfiguration=rag_config
         )
 
 
@@ -165,7 +159,7 @@ def perform_search(query, livestream, blog_posts):
     vsc = construct_vector_search_config(livestream, blog_posts, min_episode_number, max_episode_number)
     vsc['numberOfResults'] = 5
     rc = { 'vectorSearchConfiguration' : vsc }
-    res = retrieveAndGenerate(query, kbId, model_id=model_id, region_id=region_id)
+    res = retrieveAndGenerate(query, kbId, model_id=model_id, region_id=region_id, retrieval_configuration = rc)
     return res, rc
 
 ################################################################################
