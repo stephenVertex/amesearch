@@ -303,5 +303,7 @@ if search_query:
                 st.video(rr0_md['metadataAttributes']['youtube_url'], start_time = round(float(yt_time)))
             display_episode_info(rr0_md['metadataAttributes'])
 
+        if rr0_md['metadataAttributes']['content_type'] == 'cloudfix_blogpost':
+            st.info("CloudFix blog post: " + rr0_md['metadataAttributes']['x_url'], icon="🔗")
         st.divider()
         
