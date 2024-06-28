@@ -10,14 +10,47 @@ import datetime
 import re
 import os
 
+from dotenv import load_dotenv
+
+load_dotenv(override=True) ## make .env take precendence over shell
+
+# Access environment variables
+aws_access_key_id = os.getenv('AWS_ACCESS_KEY_ID')
+aws_secret_access_key = os.getenv('AWS_SECRET_ACCESS_KEY')
+aws_region = os.getenv('AWS_DEFAULT_REGION')
+kbId = os.getenv("AME_KB_ID")
+
+print(f"Knwowledge Base: {kbId=}")
+
+# Create an STS client
+sts_client = boto3.client('sts')
+
+# Get caller identity
+caller_identity = sts_client.get_caller_identity()
+
+# Print the caller identity information
+print(f"Account: {caller_identity['Account']}")
+print(f"User ID: {caller_identity['UserId']}")
+print(f"ARN: {caller_identity['Arn']}")
+
+# Create a boto3 client using the loaded environment variables
+bedrock_client = boto3.client(
+    'bedrock-runtime',
+    region_name=aws_region,
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
+)
+
+
+
 ################################################################################
 ## CONFIG STUFF
 pp = pprint.PrettyPrinter(indent=2)
 bedrock_config = Config(connect_timeout=120, read_timeout=120, retries={'max_attempts': 0})
-bedrock_client = boto3.client('bedrock-runtime')
+# bedrock_client = boto3.client('bedrock-runtime')
 bedrock_agent_client = boto3.client("bedrock-agent-runtime",
                                     config=bedrock_config)
-kbId = os.environ["AME_KB_ID"]
+
 model_id = "anthropic.claude-3-sonnet-20240229-v1:0"
 region_id = "us-east-1"
 ##
@@ -160,7 +193,8 @@ def perform_search(query, livestream, blog_posts):
     results = []    
     vsc = construct_vector_search_config(livestream, blog_posts, min_episode_number, max_episode_number)
     vsc['numberOfResults'] = 5
-    rc = { 'vectorSearchConfiguration' : vsc }
+    # rc = { 'vectorSearchConfiguration' : vsc }
+    rc = {}
     res = retrieveAndGenerate(query, kbId, model_id=model_id, region_id=region_id, retrieval_configuration = rc)
     return res, rc
 
@@ -271,6 +305,8 @@ if search_query:
     # display_episode_info(episode_data)
     st.markdown("## Answer:")
     st.write(search_results['output']['text'])
+    st.divider()
+    st.write(search_results)
 
     st.divider()
 
